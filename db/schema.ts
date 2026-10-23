@@ -3,3 +3,4 @@
 // See examples/d1/db/schema.ts for an opt-in example.
 import {sqliteTable,text} from 'drizzle-orm/sqlite-core';
 export const responses=sqliteTable('responses',{id:text('id').primaryKey(),payload:text('payload').notNull(),createdAt:text('created_at').notNull(),updatedAt:text('updated_at').notNull()});
+export const fleetRecords=sqliteTable('fleet_records',{id:text('id').primaryKey(),kind:text('kind').notNull(),vehicleId:text('vehicle_id'),payload:text('payload').notNull(),createdAt:text('created_at').notNull(),updatedAt:text('updated_at').notNull()});
