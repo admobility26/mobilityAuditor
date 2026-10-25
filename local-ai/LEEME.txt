@@ -1,0 +1,18 @@
+AD Mobility · Diagnóstico con IA local
+
+1. Requiere Node.js 22.13 o superior y Ollama iniciado en el Mac.
+2. Usa un modelo que ya tengas instalado. No se descarga ninguno automáticamente.
+3. Ejecuta Iniciar.command o, desde esta carpeta: node asistente-local.mjs
+4. En la app, abre Diagnóstico local, pega la clave temporal que aparece en Terminal y pulsa Conectar.
+5. Elige el modelo local y genera el borrador. La app envía solamente el resumen de indicadores permitido, sin nombres, puestos, comentarios ni coordenadas.
+6. El asistente se comunica únicamente con Ollama en http://127.0.0.1:11434. No necesita una clave de API externa ni crea túneles.
+
+Si el navegador bloquea la conexión con el equipo local:
+ - Descarga el resumen desde la app como resumen-analitico.json.
+ - Ejecuta: node asistente-local.mjs --file resumen-analitico.json llama3.1:8b diagnostico-local.json
+ - Sustituye el nombre de modelo por uno instalado si fuera necesario.
+ - Importa diagnostico-local.json desde la app.
+
+Los IDs y la huella del resumen se validan antes de aceptar el resultado. Si cambian los datos, vuelve a generar el diagnóstico. Las afirmaciones de texto requieren revisión humana: validar el formato y las referencias no demuestra que la interpretación sea correcta.
+
+La clave temporal solo autoriza la sesión del asistente de este Mac y se renueva cada vez que lo inicias. No la publiques. El asistente rechaza otros orígenes web y los modelos con identificadores cloud/remote.

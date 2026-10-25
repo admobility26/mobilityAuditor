@@ -15,6 +15,20 @@
       "when": 1792790181888,
       "tag": "0001_amused_mach_iv",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1792956836320,
+      "tag": "0002_dark_bug",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1792960370708,
+      "tag": "0003_vengeful_spyke",
+      "breakpoints": true
     }
   ]
 }

@@ -1,0 +1,10 @@
+export type Evidence={id:string;label:string;valores:Record<string,number|null>};
+export type AuditSummary={version:1;sourceRevision:string;period:{desde:string;hasta:string};evidencias:Evidence[];advertencias:string[]};
+export type Diagnosis={hallazgos:{titulo:string;descripcion:string;evidencias:string[];certeza:'alta'|'media'|'baja'}[];medidas:{accion:string;justificacion:string;evidencias:string[];prioridadPropuesta:'alta'|'media'|'baja'}[];limitaciones:string[]};
+export const evidenceSpec:Record<string,{label:string;keys:string[]}>;
+export const warningCodes:string[];
+export const diagnosisSchema:Record<string,unknown>;
+export function validateSummary(s:unknown):AuditSummary;
+export function validateDiagnosis(d:unknown,s:AuditSummary):Diagnosis;
+export function stableJson(value:unknown):string;
+export function digestSummary(s:AuditSummary):Promise<string>;
