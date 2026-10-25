@@ -6,6 +6,7 @@ Aplicación privada para auditar la movilidad al trabajo y los desplazamientos c
 
 - Trabajadores identificados, puestos, funciones, hábitos, barreras e intención de cambio con incentivos.
 - Flota, viajes, conductores y pasajeros, kilómetros, costes, mantenimiento e incidencias.
+- Asignaciones de varios vehículos por trabajador y varios trabajadores por vehículo; vínculos activos/inactivos y consulta en ambos sentidos.
 - Importación de posiciones GPS y recorridos GPX conservando sus segmentos y tiempos reales.
 - Comparación de recorridos históricos y propuestas de alternativas para revisión por un responsable.
 - Indicadores, gráficos, exportación CSV/JSON y vistas imprimibles como PDF.
