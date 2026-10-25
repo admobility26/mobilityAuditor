@@ -1,5 +1,5 @@
 export const manual='/formacion/manual-alumnado.pdf?v=20261025r2';
-export const materials=[{title:'Manual del alumnado',detail:'17 páginas · contenidos, casos y fichas',url:manual},{title:'Accidentes laborales de tráfico',detail:'Infografía · datos de 2024',url:'/formacion/alt-2024.pdf'},{title:'Evaluación y control',detail:'6 páginas revisadas · cuestionario, corrección y asistencia',url:'/formacion/evaluacion-control.pdf?v=20261025r2'}];
+export const materials=[{title:'Manual del alumnado',detail:'17 páginas · contenidos, casos y fichas',url:manual},{title:'Accidentes laborales de tráfico',detail:'Infografía · datos de 2024',url:'/formacion/alt-2024.pdf'},{title:'Evaluación y control',detail:'6 páginas revisadas · cuestionario, corrección y asistencia',url:'/formacion/evaluacion-control.pdf?v=20261025r2'},{title:'Guía de movilidad sostenible al trabajo',detail:'42 páginas · diagnóstico, medidas y seguimiento',url:'/formacion/guia-movilidad-sostenible.pdf'}];
 export const modules=[
  {id:'sistema',title:'La movilidad como riesgo integrado',minutes:45,subtitle:'La seguridad se construye entre todos.',topics:[
  ['Objetivos y preguntas de entrada',2,'Revisamos cinco ideas previas: in itinere, manos libres, agendas imposibles, ADAS y rutas cortas. La sesión busca reconocer los riesgos y decidir qué barreras necesita cada desplazamiento.'],
@@ -52,3 +52,5 @@ export const decisions=[
 export type TrainingDraft={title:string;participant:string;company:string;date:string;completed:string[];notes:Record<string,string>;answers:number[];submitted:boolean};
 export function blankTraining():TrainingDraft{return {title:'Sesión de prevención vial',participant:'',company:'',date:new Date().toISOString().slice(0,10),completed:[],notes:{},answers:Array(15).fill(-1),submitted:false};}
 export function scoreTraining(answers:number[]){return questions.reduce((n,q,i)=>n+(answers[i]===q[2]?1:0),0);}
+
+export const trainingNoteKeys=['organizacion','persona','vehiculo','entorno','jornada','compromiso','empresa','guiaInicio','guiaCentro','guiaDiseno','guiaRegistro','guiaImplantacion','guiaSeguimiento','guiaActualizacion','guiaParticipacion','guiaDebilidades','guiaAmenazas','guiaFortalezas','guiaOportunidades','guiaMedida'] as const;
