@@ -1,5 +1,5 @@
-export const manual='/formacion/manual-alumnado.pdf';
-export const materials=[{title:'Manual del alumnado',detail:'17 páginas · contenidos, casos y fichas',url:manual},{title:'Accidentes laborales de tráfico',detail:'Infografía · datos de 2024',url:'/formacion/alt-2024.pdf'},{title:'Evaluación y control',detail:'6 páginas · cuestionario, corrección y asistencia',url:'/formacion/evaluacion-control.pdf'}];
+export const manual='/formacion/manual-alumnado.pdf?v=20261025r2';
+export const materials=[{title:'Manual del alumnado',detail:'17 páginas · contenidos, casos y fichas',url:manual},{title:'Accidentes laborales de tráfico',detail:'Infografía · datos de 2024',url:'/formacion/alt-2024.pdf'},{title:'Evaluación y control',detail:'6 páginas revisadas · cuestionario, corrección y asistencia',url:'/formacion/evaluacion-control.pdf?v=20261025r2'}];
 export const modules=[
  {id:'sistema',title:'La movilidad como riesgo integrado',minutes:45,subtitle:'La seguridad se construye entre todos.',topics:[
  ['Objetivos y preguntas de entrada',2,'Revisamos cinco ideas previas: in itinere, manos libres, agendas imposibles, ADAS y rutas cortas. La sesión busca reconocer los riesgos y decidir qué barreras necesita cada desplazamiento.'],
@@ -21,7 +21,7 @@ export const modules=[
  ]},
  {id:'rutas',title:'Rutas, emergencias y movilidad sostenible',minutes:50,subtitle:'Elige por exposición al riesgo, además de por tiempo.',topics:[
  ['Comparar rutas y proteger a usuarios vulnerables',10,'Compara tiempo realista, tipo de vía, cruces, lluvia, aparcamiento y maniobras. Anticipa peatones, ciclistas, motoristas y VMP. Una alternativa más larga puede reducir complejidad, pero necesita revisión en su contexto.'],
- ['Proteger · Avisar · Socorrer',10,'Evita un segundo accidente y no te expongas al tráfico. Avisa al 112 cuando sea necesario, indicando ubicación y riesgos, y ayuda dentro de tus conocimientos. La seguridad personal tiene prioridad sobre reparar o fotografiar.'],
+ ['Proteger · Avisar · Socorrer',10,'Evita un segundo accidente y no te expongas al tráfico. Avisa al 112 cuando sea necesario, indicando ubicación y riesgos, y ayuda dentro de tus conocimientos. La seguridad personal tiene prioridad sobre reparar o fotografiar. Para los vehículos obligados en España, utiliza la baliza V-16 conectada certificada, sin exponerte al tráfico; no sustituye al aviso al 112 cuando sea necesario.'],
  ['Alternativas y rediseño de una jornada',11,'Agrupa visitas, comparte vehículo cuando sea viable y utiliza transporte público o reuniones a distancia. Taller: una visita se retrasa con lluvia; replantea comunicaciones, orden de servicios, márgenes y posible fatiga.'],
  ['Del diagnóstico al seguimiento del plan',12,'Define alcance, encuesta y exposición; fija objetivos medibles, medidas y responsables. Escucha propuestas y revisa incidentes, defectos, kilómetros, rutas y alternativas de movilidad.']
  ]}
@@ -37,7 +37,7 @@ export const questions=[
  ['Un ADAS…',['Sustituye al conductor','Es una capa de asistencia con límites','Permite usar el móvil'],1,9,'Conoce los límites de los asistentes del vehículo concreto.'],
  ['En una furgoneta…',['La carga puede ir suelta si el trayecto es corto','La carga debe ir colocada y sujeta','Solo importa el peso total'],1,8,'Una frenada puede desplazar los objetos incluso en un trayecto breve.'],
  ['La ruta más segura…',['Siempre es la más corta','Considera vía, clima, tráfico, conductor y vehículo','Siempre usa carreteras secundarias'],1,10,'La evaluación debe considerar la exposición y complejidad del trayecto.'],
- ['Ante una avería, la prioridad inicial es…',['Reparar','Protegerse y evitar otro siniestro','Hacer fotografías'],1,10,'La seguridad personal tiene prioridad.'],
+ ['Ante una avería, la prioridad inicial es…',['Reparar','Protegerse, señalizar con la baliza V-16 conectada sin exponerse y evitar otro siniestro','Hacer fotografías'],1,10,'La seguridad personal tiene prioridad. Utiliza la V-16 conectada certificada cuando corresponda y avisa al 112 si es necesario.'],
  ['Un casi accidente…',['No sirve porque no hubo daños','Puede aportar información preventiva','Debe ocultarse'],1,15,'Comunicarlo permite investigar las barreras antes de que haya lesiones.'],
  ['La política del móvil debe…',['Responsabilizar solo al conductor','Incluir también a quien llama y planifica','Permitir WhatsApp de trabajo durante la marcha'],1,5,'Quien coordina también debe proteger los periodos de conducción.'],
  ['La lluvia…',['Solo afecta a la visibilidad','Puede afectar a adherencia, visibilidad y tiempo de viaje','No cambia la planificación'],1,8,'El margen de agenda forma parte de la prevención.'],
