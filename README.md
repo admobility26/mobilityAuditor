@@ -21,7 +21,7 @@ React + TypeScript + Vinext; Worker con D1 y Drizzle. El manifiesto `.openai/hos
 
 La autenticación de producción depende del entorno Sites y de sus cabeceras verificadas. Publicar directamente este Worker fuera de Sites requiere implementar una autenticación equivalente y proteger esas cabeceras; copiar el código a Cloudflare no configura ese acceso automáticamente.
 
-El Worker `mobilityauditor.admobility26.workers.dev` redirige a la aplicación privada existente. El código del repositorio y la publicación del Site son operaciones distintas: este repositorio no presupone un despliegue automático desde GitHub.
+El Worker `mobilityauditor.admobility26.workers.dev` redirige a la aplicación privada existente. El código del repositorio y la publicación del Site son operaciones distintas: Workers Builds despliega la redirección con la configuración de `cloudflare/README.md`. La aplicación privada se publica por separado mediante Sites.
 
 ## Desarrollo local
 
