@@ -9,7 +9,7 @@ export default function Training(){
  const [courses,setCourses]=useState<Course[]>([]),[course,setCourse]=useState<Course|null>(null),[index,setIndex]=useState(0),[search,setSearch]=useState(''),[message,setMessage]=useState(''),[busy,setBusy]=useState(false),[progress,setProgress]=useState(0),[dirty,setDirty]=useState(false),[edit,setEdit]=useState(false),[presentation,setPresentation]=useState(false),[original,setOriginal]=useState(false),[menu,setMenu]=useState(true),[jump,setJump]=useState('');
  const section=course?.sections[index];
  const chapterLabel=(s:CourseSection)=>s.title.match(/^(\d+)[.)]/)?.[1]||'Inicio';
- useEffect(()=>{if(!course)return;const frame=requestAnimationFrame(()=>{const target=document.getElementById(menu?'course-menu':jump||'course-lesson');target?.scrollIntoView({block:'start',behavior:'auto'});target?.focus({preventScroll:true});});return()=>cancelAnimationFrame(frame)},[index,menu,jump]);
+ useEffect(()=>{if(!course)return;const frame=requestAnimationFrame(()=>{const target=document.getElementById(menu?'course-menu':jump||'course-lesson');target?.scrollIntoView({block:'start',behavior:'auto'});target?.focus({preventScroll:true});});return()=>cancelAnimationFrame(frame)},[index,menu,jump,course?.id,course?.structureVersion]);
  function go(i:number,anchor=''){setIndex(i);setOriginal(false);setMenu(false);setJump(anchor);}
  function backToMenu(){setMenu(true);setJump('');}
  async function load(){try{const r=await fetch('/api/training/courses');const data=await r.json() as any;if(!r.ok)throw Error(data.error);setCourses(data);}catch(e){setMessage((e as Error).message);}}
