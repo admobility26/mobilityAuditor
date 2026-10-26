@@ -1,0 +1,6 @@
+{
+ "name":"ad-mobility-desktop","version":"1.0.0","private":true,"main":"main.cjs","description":"Acceso de escritorio a Auditoría y Formación AD Mobility (requiere Internet)","author":"AD Mobility","license":"UNLICENSED",
+ "scripts":{"start":"electron .","dist:mac":"electron-builder --mac dmg --arm64 --x64 --publish never","dist:win":"electron-builder --win nsis --x64 --publish never"},
+ "devDependencies":{"electron":"44.7.0","electron-builder":"26.15.3"},
+ "build":{"appId":"com.admobility.suite","productName":"AD Mobility","asar":true,"directories":{"output":"release"},"files":["main.cjs","preload.cjs","index.html","ui.js","style.css","assets/**/*","package.json"],"mac":{"category":"public.app-category.business","identity":null,"icon":"assets/icon.icns"},"dmg":{"artifactName":"AD-Mobility-${version}-Mac-${arch}.${ext}"},"win":{"icon":"assets/logo.png","signAndEditExecutable":false,"artifactName":"AD-Mobility-${version}-Windows-${arch}-Setup.${ext}"},"nsis":{"oneClick":false,"perMachine":false,"allowToChangeInstallationDirectory":true,"createDesktopShortcut":true,"createStartMenuShortcut":true,"deleteAppDataOnUninstall":false}}
+}

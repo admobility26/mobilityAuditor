@@ -1,0 +1,4 @@
+node_modules/
+release/
+assets/AppIcon.iconset/
+.DS_Store
