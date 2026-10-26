@@ -4,4 +4,4 @@ declare namespace Cloudflare {
     BUCKET?: R2Bucket;
   }
 }
-declare namespace Cloudflare { interface Env { TRAINING_MIGRATION_KEY?: string; } }
+

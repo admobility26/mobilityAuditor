@@ -1,0 +1,8 @@
+{
+  "name":"admobility-formacion",
+  "main":"formacion-proxy.mjs",
+  "compatibility_date":"2026-05-15",
+  "workers_dev":false,
+  "routes":[{"pattern":"formacion.admobility26.com","custom_domain":true}],
+  "vars":{"FORMATION_ORIGIN":"https://ad-mobility-formacion.aitor-dlgd.chatgpt.site"}
+}
