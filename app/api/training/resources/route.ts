@@ -3,7 +3,7 @@ import {getChatGPTUser} from '../../../chatgpt-auth';
 import {getDb} from '../../../../db';
 import {trainingResources} from '../../../../db/schema';
 import {desc,eq} from 'drizzle-orm';
-import {MAX_RESOURCE_BYTES,resourceMime,type TrainingResource} from '../../../training-resource-model';
+import {MAX_DIRECT_RESOURCE_BYTES,resourceMime,type TrainingResource} from '../../../training-resource-model';
 export const dynamic='force-dynamic';
 const json=(data:unknown,status=200)=>Response.json(data,{status,headers:{'Cache-Control':'no-store'}});
 const sameOrigin=(req:Request)=>!req.headers.get('origin')||req.headers.get('origin')===new URL(req.url).origin;
@@ -11,11 +11,11 @@ export async function GET(){if(!await getChatGPTUser())return json({error:'Inici
 export async function POST(req:Request){
  if(!await getChatGPTUser())return json({error:'Inicia sesión.'},401);if(!sameOrigin(req))return json({error:'Origen no permitido.'},403);
  let uploaded='';try{
- if(Number(req.headers.get('content-length'))>MAX_RESOURCE_BYTES+1024*1024)throw Error('El archivo supera los 25 MB.');
+ if(Number(req.headers.get('content-length'))>MAX_DIRECT_RESOURCE_BYTES+1024*1024)throw Error('Actualiza la página para subir archivos de hasta 250 MB por partes.');
  // Send original bytes directly: multipart POSTs are intercepted by the framework's 1 MB Server Action limit.
  if(!req.body)throw Error('Selecciona un archivo.');
  const reader=req.body.getReader(),chunks:Uint8Array[]=[];let size=0;
- while(true){const {done,value}=await reader.read();if(done)break;size+=value.byteLength;if(size>MAX_RESOURCE_BYTES){await reader.cancel();throw Error('El archivo supera los 25 MB.');}chunks.push(value);}
+ while(true){const {done,value}=await reader.read();if(done)break;size+=value.byteLength;if(size>MAX_DIRECT_RESOURCE_BYTES){await reader.cancel();throw Error('Actualiza la página para subir archivos de hasta 250 MB por partes.');}chunks.push(value);}
  if(size<5)throw Error('El archivo está vacío o no es válido.');
  const bytes=new Uint8Array(size);let offset=0;for(const chunk of chunks){bytes.set(chunk,offset);offset+=chunk.byteLength;}
  const mimeType=resourceMime(bytes.subarray(0,16));if(!mimeType)throw Error('Formato no admitido. Usa PDF, PNG, JPG, WebP o GIF.');
