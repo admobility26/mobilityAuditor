@@ -1,5 +1,5 @@
 import {env} from 'cloudflare:workers';
-import {getChatGPTUser} from '../../../../chatgpt-auth';
+import {getChatGPTUser,sameOrigin} from '../../../../chatgpt-auth';
 import {getDb} from '../../../../../db';
 import {trainingResources} from '../../../../../db/schema';
 import {eq} from 'drizzle-orm';

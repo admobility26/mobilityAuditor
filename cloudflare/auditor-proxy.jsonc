@@ -1,0 +1,1 @@
+{"name":"admobility-auditor","main":"auditor-proxy.mjs","compatibility_date":"2026-05-15","workers_dev":false,"routes":[{"pattern":"auditor.admobility26.com","custom_domain":true}],"vars":{"AUDITOR_ORIGIN":"https://ad-movilidad-auditoria-aitor.aitor-dlgd.chatgpt.site"}}

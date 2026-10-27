@@ -1,5 +1,5 @@
 import {env} from 'cloudflare:workers';
-import {getChatGPTUser} from '../../../chatgpt-auth';
+import {getChatGPTUser,sameOrigin} from '../../../chatgpt-auth';
 import {getDb} from '../../../../db';
 import {trainingCourses} from '../../../../db/schema';
 import {desc,eq} from 'drizzle-orm';
@@ -19,10 +19,10 @@ function validate(c:Course){
  if(!Array.isArray(c.completed)||c.completed.some(id=>!ids.has(id))||!c.notes||!c.answers||Object.entries(c.notes).some(([k,v])=>!ids.has(k)||typeof v!=='string'||v.length>10000)||Object.entries(c.answers).some(([k,v])=>!ids.has(k)||!Number.isInteger(v)||v<0||v>2))throw Error('Progreso no válido.');
 }
 export async function GET(){if(!await getChatGPTUser())return json({error:'Inicia sesión.'},401);return json((await getDb().select().from(trainingCourses).orderBy(desc(trainingCourses.updatedAt))).map(r=>JSON.parse(r.payload)));}
-export async function POST(req:Request){if(!await getChatGPTUser())return json({error:'Inicia sesión.'},401);if(req.headers.get('origin')&&req.headers.get('origin')!==new URL(req.url).origin)return json({error:'Origen no permitido.'},403);
+export async function POST(req:Request){if(!await getChatGPTUser())return json({error:'Inicia sesión.'},401);if(!sameOrigin(req))return json({error:'Origen no permitido.'},403);
  let uploaded='';try{if(Number(req.headers.get('content-length'))>32*1024*1024)throw Error('Archivo demasiado grande.');const form=await req.formData(),raw=form.get('course');if(typeof raw!=='string'||new TextEncoder().encode(raw).byteLength>1800000)throw Error('El contenido del curso supera el límite de 1,8 MB de texto. Divide el manual.');const c=JSON.parse(raw) as Course;validate(c);const db=getDb(),old=c.id?(await db.select().from(trainingCourses).where(eq(trainingCourses.id,c.id)))[0]:null;const file=form.get('file');
  if(c.id&&!old)throw Error('Curso no encontrado.');
  const id=old?c.id:crypto.randomUUID();if(!old){if(!(file instanceof File)||file.size>25*1024*1024||file.size<5||new TextDecoder().decode(await file.slice(0,5).arrayBuffer())!=='%PDF-')throw Error('Sube un PDF válido de hasta 25 MB.');await env.BUCKET!.put(`training/${id}.pdf`,file.stream(),{httpMetadata:{contentType:'application/pdf'}});uploaded=id;c.filename=file.name.slice(0,250);}else c.filename=JSON.parse(old!.payload).filename;
  c.id=id;c.updatedAt=new Date().toISOString();const values={payload:JSON.stringify(c),updatedAt:c.updatedAt};if(old)await db.update(trainingCourses).set(values).where(eq(trainingCourses.id,id));else await db.insert(trainingCourses).values({id,...values});return json(c);
  }catch(e){if(uploaded)await env.BUCKET!.delete(`training/${uploaded}.pdf`);return json({error:(e as Error).message},400)}}
-export async function DELETE(req:Request){if(!await getChatGPTUser())return json({error:'Inicia sesión.'},401);if(req.headers.get('origin')&&req.headers.get('origin')!==new URL(req.url).origin)return json({error:'Origen no permitido.'},403);const id=new URL(req.url).searchParams.get('id');if(!id||! /^[a-f0-9-]{36}$/.test(id))return json({error:'Curso no válido.'},400);await env.BUCKET!.delete(`training/${id}.pdf`);await getDb().delete(trainingCourses).where(eq(trainingCourses.id,id));return json({ok:true});}
+export async function DELETE(req:Request){if(!await getChatGPTUser())return json({error:'Inicia sesión.'},401);if(!sameOrigin(req))return json({error:'Origen no permitido.'},403);const id=new URL(req.url).searchParams.get('id');if(!id||! /^[a-f0-9-]{36}$/.test(id))return json({error:'Curso no válido.'},400);await env.BUCKET!.delete(`training/${id}.pdf`);await getDb().delete(trainingCourses).where(eq(trainingCourses.id,id));return json({ok:true});}

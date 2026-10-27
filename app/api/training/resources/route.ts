@@ -1,12 +1,11 @@
 import {env} from 'cloudflare:workers';
-import {getChatGPTUser} from '../../../chatgpt-auth';
+import {getChatGPTUser,sameOrigin} from '../../../chatgpt-auth';
 import {getDb} from '../../../../db';
 import {trainingResources} from '../../../../db/schema';
 import {desc,eq} from 'drizzle-orm';
 import {MAX_DIRECT_RESOURCE_BYTES,resourceMime,type TrainingResource} from '../../../training-resource-model';
 export const dynamic='force-dynamic';
 const json=(data:unknown,status=200)=>Response.json(data,{status,headers:{'Cache-Control':'no-store'}});
-const sameOrigin=(req:Request)=>!req.headers.get('origin')||req.headers.get('origin')===new URL(req.url).origin;
 export async function GET(){if(!await getChatGPTUser())return json({error:'Inicia sesión.'},401);const rows=await getDb().select().from(trainingResources).orderBy(desc(trainingResources.createdAt));return json(rows.map(r=>JSON.parse(r.payload)));}
 export async function POST(req:Request){
  if(!await getChatGPTUser())return json({error:'Inicia sesión.'},401);if(!sameOrigin(req))return json({error:'Origen no permitido.'},403);

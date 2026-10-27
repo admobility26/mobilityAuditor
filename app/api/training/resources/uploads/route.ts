@@ -1,5 +1,5 @@
 import {env} from 'cloudflare:workers';
-import {getChatGPTUser} from '../../../../chatgpt-auth';
+import {getChatGPTUser,sameOrigin} from '../../../../chatgpt-auth';
 import {getDb} from '../../../../../db';
 import {trainingResources,trainingResourceUploads} from '../../../../../db/schema';
 import {eq,lt} from 'drizzle-orm';
@@ -7,7 +7,6 @@ import {MAX_RESOURCE_BYTES,RESOURCE_CHUNK_BYTES,resourceMime,resourcePartLength,
 export const dynamic='force-dynamic';
 type Upload=TrainingResource&{uploadId:string;owner:string};
 const json=(data:unknown,status=200)=>Response.json(data,{status,headers:{'Cache-Control':'no-store'}});
-const sameOrigin=(r:Request)=>!r.headers.get('origin')||r.headers.get('origin')===new URL(r.url).origin;
 async function pending(id:unknown,owner:string){if(typeof id!=='string'||!/^[a-f0-9-]{36}$/.test(id))throw Error('Subida no válida.');const row=(await getDb().select().from(trainingResourceUploads).where(eq(trainingResourceUploads.id,id)))[0];if(!row)throw Error('Subida no encontrada.');const data=JSON.parse(row.payload) as Upload;if(data.owner!==owner)throw Error('Subida no encontrada.');return data;}
 async function smallJson(req:Request){if(Number(req.headers.get('content-length'))>20000)throw Error('Solicitud demasiado grande.');const text=await req.text();if(text.length>20000)throw Error('Solicitud demasiado grande.');return JSON.parse(text);}
 export async function POST(req:Request){const user=await getChatGPTUser();if(!user)return json({error:'Inicia sesión.'},401);if(!sameOrigin(req))return json({error:'Origen no permitido.'},403);

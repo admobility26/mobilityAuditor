@@ -1,2 +1,2 @@
-import App from "./ui";
-export default function Page(){return <App/>}
+import AuditorPortal from "./auditor-portal";
+export default function Page(){return <AuditorPortal/>}

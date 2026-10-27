@@ -53,3 +53,14 @@ Consulta `docs/revision-formacion.md`. Se ha incorporado el manual exacto sin ca
 Los materiales formativos y el logo se incorporan por indicación de su titular. No se presupone una licencia abierta para redistribuirlos. La infografía conserva su atribución institucional y sus datos de 2024.
 
 No subas `.env*`, credenciales, bases de datos locales, exportaciones de trabajadores, recorridos reales, `.wrangler`, `.sites-runtime` ni `node_modules`.
+
+
+## Portal Auditor con acceso de administrador
+
+`https://auditor.admobility26.com` muestra una demostración ficticia a visitantes y abre la auditoría completa, incluida Formación, solo a una sesión con rol administrador. Todos los datos y archivos originales se protegen en el servidor; la identidad hospedada por sí sola no autoriza el acceso. No hay registro público ni creación de administradores desde el navegador.
+
+Variables runtime: `FORMATION_ADMIN_EMAIL`, `FORMATION_ADMIN_HASH` (secreto PBKDF2), `PUBLIC_ORIGIN`. Se reutiliza el sistema de autenticación probado de Formación, con una cookie exclusiva de Auditor. Las cuentas y sesiones son independientes de formacion.admobility26.com. El administrador inicial se crea una vez y la variable no reinicia contraseñas ya cambiadas.
+
+El Worker `cloudflare/auditor-proxy.mjs` y su configuración proporcionan el subdominio. El proyecto Sites conserva su base de datos y los documentos originales; no se copian datos reales a la demostración.
+
+Prueba de acceso: `node scripts/test-auditor-security.mjs` con la instancia local en 5173 y las migraciones aplicadas. `scripts/seed-local-auditor.mjs` crea exclusivamente una cuenta de prueba local. Nunca ejecutar estas herramientas sobre una base de producción.

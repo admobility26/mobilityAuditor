@@ -1,0 +1,24 @@
+import assert from 'node:assert/strict';
+import {execFileSync} from 'node:child_process';
+import {passwordHash,digest} from '../app/password.mjs';
+const learnerToken='qa-learner-token-only-local';
+const seed=`INSERT OR REPLACE INTO formation_users (id,email,name,password_hash,role,active,created_at) VALUES ('qa-learner','qa-learner@example.invalid','Alumno local','${await passwordHash('LearnerQA!2345678')}','learner',1,'2026-10-26T00:00:00.000Z'); INSERT OR REPLACE INTO formation_sessions (token_hash,user_id,expires_at) VALUES ('${await digest(learnerToken)}','qa-learner','2099-01-01T00:00:00.000Z');`;
+execFileSync(process.execPath,['--import','./scripts/sites-env.mjs','./node_modules/wrangler/bin/wrangler.js','d1','execute','DB','--local','--config','dist/server/wrangler.json','--persist-to','.wrangler/state','--command',seed],{stdio:'pipe'});
+const base='http://127.0.0.1:5173';
+const routes=['/api/responses','/api/fleet','/api/audit-reports','/api/training','/api/training/courses','/api/training/resources','/api/training/courses/file?id=00000000-0000-0000-0000-000000000000','/api/training/resources/file?id=00000000-0000-0000-0000-000000000000'];
+const call=(path,method='GET',body,cookie='',origin=base,extra={})=>fetch(base+path,{method,headers:{origin,...extra,...(cookie?{cookie}:{}),...(body?{'content-type':'application/json'}:{})},...(body?{body:JSON.stringify(body)}:{})});
+for(const path of routes){assert.equal((await call(path)).status,401,path);assert.equal((await call(path,'GET',null,'',base,{'oai-authenticated-user-id':'forged','oai-authenticated-user-email':'admobility26@gmail.com'})).status,401,'Hosted identity headers must not authorize '+path);}
+for(const path of ['/api/responses','/api/fleet','/api/audit-reports','/api/training','/api/training/courses','/api/training/resources','/api/training/resources/uploads'])assert.equal((await call(path,'POST',{})).status,401,path);
+assert.equal((await call('/api/training/resources/uploads','PUT',{})).status,401);
+for(const path of ['/api/responses','/api/fleet','/api/training/courses','/api/training/resources','/api/training/resources/uploads'])assert.equal((await call(path,'DELETE',{})).status,401,path);
+for(const path of routes)assert.equal((await call(path,'GET',null,'__Host-ad-auditor='+learnerToken)).status,401,'Learner cannot access '+path);
+assert.equal((await call('/api/auth','POST',{action:'login',email:'qa-learner@example.invalid',password:'LearnerQA!2345678'})).status,401);
+let r=await call('/api/auth','POST',{action:'login',email:'qa-admin@example.invalid',password:'LocalQA!23456789'});assert.equal(r.status,200,await r.clone().text());const cookie=r.headers.getSetCookie().map(v=>v.split(';')[0]).join('; ');const user=(await r.json()).user;assert.equal(user.role,'admin');assert.ok(!JSON.stringify(user).includes('password'));assert.match(r.headers.get('set-cookie'),/HttpOnly/);assert.match(r.headers.get('set-cookie'),/SameSite=Strict/);assert.match(r.headers.get('set-cookie'),/Secure/);
+for(const path of routes.slice(0,6))assert.equal((await call(path,'GET',null,cookie)).status,200,path);
+assert.equal((await call('/api/auth','POST',{action:'logout'},cookie,'https://otro.example')).status,403);
+assert.equal((await call('/api/responses','POST',{},cookie,'https://otro.example')).status,403);
+assert.equal((await call('/api/fleet','POST',{},cookie,'https://otro.example')).status,403);
+assert.equal((await call('/api/auth','POST',{action:'login',email:'qa-admin@example.invalid',password:'incorrecta'})).status,401);
+assert.equal((await call('/api/auth','POST',{action:'signup',email:'intruso@example.invalid'})).status,401);
+assert.equal((await call('/api/auth','POST',{action:'logout'},cookie)).status,200);assert.equal((await call('/api/responses','GET',null,cookie)).status,401);
+console.log('OK: auditoría, flota, informes, formación, PDF e imágenes privados; identidad falsificada rechazada; sesión segura, CSRF y cierre de sesión verificados.');
